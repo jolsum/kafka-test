@@ -19,8 +19,8 @@ public class DataConsumer {
   private long time = 0;
 
   public void run() {
-    Executors.newSingleThreadScheduledExecutor()
-        .scheduleWithFixedDelay(this::printStatus, 0, 5, TimeUnit.SECONDS);
+    Executors.newSingleThreadScheduledExecutor().scheduleWithFixedDelay(this::printStatus, 0, 5,
+        TimeUnit.SECONDS);
 
     consume();
   }
@@ -29,7 +29,8 @@ public class DataConsumer {
     try {
       synchronized (lock) {
         if (received > 0) {
-          System.out.println("Received " + received + ", avg delay: " + (time / received) + " ms");
+          System.out.println("Received " + received + ", avg delay: " + (time / received) + " ms, "
+              + RequestDeserializer.bytes.getAndSet(0) + " bytes");
           received = 0;
           time = 0;
         }
@@ -50,9 +51,7 @@ public class DataConsumer {
         ConsumerRecords<Long, Request> records = consumer.poll(1000);
         for (ConsumerRecord<Long, Request> record : records) {
 
-          long delay = System.currentTimeMillis() - record.key();
-
-          //          System.out.println(record.value().getNum() + " " + record.value().getProcessed());
+          long delay = System.currentTimeMillis() - record.value().getGeneratedAt();
 
           synchronized (lock) {
             ++received;

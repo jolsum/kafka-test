@@ -1,24 +1,20 @@
 package com.lars.kafka;
 
-import java.util.Map;
-
-import org.apache.kafka.common.serialization.Serializer;
-
 import com.lars.kafka.model.Request;
+import java.util.Map;
+import org.apache.kafka.common.serialization.Serializer;
 
 public class RequestSerializer implements Serializer<Request> {
 
-	@Override
-	public void configure(Map<String, ?> configs, boolean isKey) {
-	}
+  @Override
+  public void configure(Map<String, ?> configs, boolean isKey) {}
 
-	@Override
-	public byte[] serialize(String topic, Request data) {
-		return data.toByteArray();
-	}
+  @Override
+  public byte[] serialize(String topic, Request data) {
+    return data.toByteArray();
+  }
 
-	@Override
-	public void close() {
-	}
+  @Override
+  public void close() {}
 
 }

@@ -21,6 +21,7 @@ public class DataProducer {
   private void runProducer() {
 
     long sleepTime = 1000 / QPS;
+    long producerId = System.currentTimeMillis();
 
     Properties properties = KafkaUtil.getProperties();
     properties.put(ProducerConfig.CLIENT_ID_CONFIG, "Producer");
@@ -29,10 +30,10 @@ public class DataProducer {
 
       int i = 0;
       while (!Thread.currentThread().isInterrupted()) {
-        Request request = Request.newBuilder().setNum(++i).build();
+        Request request =
+            Request.newBuilder().setNum(++i).setGeneratedAt(System.currentTimeMillis()).build();
 
-        ProducerRecord<Long, Request> record =
-            new ProducerRecord<>(TOPIC, System.currentTimeMillis(), request);
+        ProducerRecord<Long, Request> record = new ProducerRecord<>(TOPIC, producerId, request);
 
         producer.send(record);
 
